@@ -13,7 +13,7 @@ public class StudentProgressReport {
 	/** In this hour start work time. */
 	public static final int STARTTIMEHOUR = 10;
 	/** In this hour end work time. */
-	public static final int ENDTIMEHOUR = 18;
+	public static final int ENDTIMEHOUR = 18; 
 
 	/**
 	 * How many days sum to current time for calculate Start time lerning
