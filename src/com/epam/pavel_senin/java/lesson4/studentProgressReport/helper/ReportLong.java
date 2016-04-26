@@ -1,13 +1,13 @@
-package com.epam.pavel_senin.java.lesson4.helper;
+package com.epam.pavel_senin.java.lesson4.studentProgressReport.helper;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Formatter;
 import java.util.ResourceBundle;
 
-import com.epam.pavel_senin.java.lesson4.StudentProgressReport;
-import com.epam.pavel_senin.java.lesson4.type.Course;
-import com.epam.pavel_senin.java.lesson4.type.Student;
+import com.epam.pavel_senin.java.lesson4.studentProgressReport.StudentProgressReport;
+import com.epam.pavel_senin.java.lesson4.studentProgressReport.type.Course;
+import com.epam.pavel_senin.java.lesson4.studentProgressReport.type.Student;
 
 /** Class for print Long report */
 public class ReportLong {
@@ -25,7 +25,7 @@ public class ReportLong {
 	 * @param rb
 	 *            - Resource Bundle
 	 */
-	public static void printReportLong(Student[] students, Calendar currentTime, ResourceBundle rb) {
+	public static void printReportLong(Student[] students, Calendar currentTime, Calendar [] startTime, ResourceBundle rb) {
 
 		int wideReport = getWideReport(students);
 		String line = getLine(wideReport);
@@ -33,7 +33,7 @@ public class ReportLong {
 		StringBuilder sb = new StringBuilder();
 		Formatter fmt = new Formatter(sb);
 
-		for (Student currentStudent : students) {
+		for (int i=0; i<students.length; i++) {
 
 			int minWideSecondColum = wideReport - LENGTH_WORD_CURRENT_DATE;
 			String lineFormater = "%-" + LENGTH_WORD_CURRENT_DATE + "s %" + minWideSecondColum + "s\n";
@@ -42,39 +42,41 @@ public class ReportLong {
 
 			fmt.format(lineFormater, rb.getString("currenttime"), getDateToString(currentTime));
 
-			fmt.format(lineFormater, rb.getString("startdate"), getDateToString(currentStudent.getStartDate()));
-
-			fmt.format(lineFormater, rb.getString("finishdate"), getDateToString(currentStudent.getEndDate()));
-
+			fmt.format(lineFormater, rb.getString("startdate"), getDateToString(startTime[i]));
+			
+				
+			fmt.format(lineFormater, rb.getString("finishdate"), getDateToString(Time.getEndDate(startTime [i], students[i].getCurriculumStudend())));
+			
 			String tmpString = StudentProgressReport.STARTTIMEHOUR + ":00 - " + StudentProgressReport.ENDTIMEHOUR
 					+ ":00";
 			fmt.format(lineFormater, rb.getString("workingtime"), tmpString);
 
-			fmt.format(lineFormater, rb.getString("student"), currentStudent.getNameStudent());
+			fmt.format(lineFormater, rb.getString("student"), students[i].getNameStudent());
 
 			fmt.format(lineFormater, rb.getString("CURRICULUM"),
-					currentStudent.getCurriculumStudend().getNameCurriculum());
+					students[i].getCurriculumStudend().getNameCurriculum());
 			fmt.format(line + "\n");
 
-			int i = 1;
+			int j = 1;
 			lineFormater = "%-" + (wideReport - LENGTH_HOURSES_COURSE - LENGTH_NUMBER_COURSE) + "s %"
 					+ LENGTH_HOURSES_COURSE + "s\n";
 
-			for (Course currentCourse : currentStudent.getCurriculumStudend().getCoursesInCurriculum()) {
+			for (Course currentCourse : students[i].getCurriculumStudend().getCoursesInCurriculum()) {
 
-				fmt.format(i + ". " + lineFormater, currentCourse.getNameCourse(), currentCourse.getDurationHours());
-				i++;
+				fmt.format(j + ". " + lineFormater, currentCourse.getNameCourse(), currentCourse.getDurationHours());
+				j++;
 			}
+			
 			fmt.format(line + "\n");
-			fmt.format(rb.getString("TOTAL") + currentStudent.getCurriculumStudend().getSumHours() + "\n");
+			fmt.format(rb.getString("TOTAL") + Time.getSumHoursCurriculum(students[i].getCurriculumStudend()) + "\n");
 
-			if (Time.timeProgrammPassed(currentStudent, currentTime)) {
+			if (Time.timeProgrammPassed(students[i], startTime[i], currentTime)) {
 				fmt.format(rb.getString("completeL"));
 			} else {
 				fmt.format(rb.getString("notcompleteL"));
 			}
 
-			int workhours = Time.getDiffWorkTimeInHours(currentStudent, currentTime);
+			int workhours = Time.getDiffWorkTimeInHours(students[i], startTime[i], currentTime);
 
 			int day = workhours / (StudentProgressReport.ENDTIMEHOUR - StudentProgressReport.STARTTIMEHOUR);
 			int hours = workhours % (StudentProgressReport.ENDTIMEHOUR - StudentProgressReport.STARTTIMEHOUR);

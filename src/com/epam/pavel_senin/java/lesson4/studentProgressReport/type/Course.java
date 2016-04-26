@@ -1,4 +1,4 @@
-package com.epam.pavel_senin.java.lesson4.type;
+package com.epam.pavel_senin.java.lesson4.studentProgressReport.type;
 
 /**
  * Class for Corses

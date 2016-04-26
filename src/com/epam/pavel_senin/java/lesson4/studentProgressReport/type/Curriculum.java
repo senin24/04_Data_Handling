@@ -1,4 +1,4 @@
-package com.epam.pavel_senin.java.lesson4.type;
+package com.epam.pavel_senin.java.lesson4.studentProgressReport.type;
 
 /**
  * Class for Curriculums
@@ -7,7 +7,7 @@ public class Curriculum {
 
 	private String nameCurriculum;
 	private Course coursesInCurriculum[];
-	private int sumHours;
+	//private int sumHours;
 
 	/**
 	 * @param nameCurriculum
@@ -17,20 +17,11 @@ public class Curriculum {
 	 */
 	public Curriculum(String nameCurriculum, Course... courses) {
 		this.nameCurriculum = nameCurriculum;
-		this.sumHours = 0;
 		int i = courses.length;
 		this.coursesInCurriculum = new Course[i];
 		for (int j = 0; j < i; j++) {
-			this.coursesInCurriculum[j] = new Course(courses[j].getNameCourse(), courses[j].getDurationHours());
-			this.sumHours = this.sumHours + courses[j].getDurationHours();
+			this.coursesInCurriculum[j] = new Course(courses[j].getNameCourse(), courses[j].getDurationHours());			
 		}
-	}
-
-	/**
-	 * @return the sumHours
-	 */
-	public int getSumHours() {
-		return sumHours;
 	}
 
 	/**

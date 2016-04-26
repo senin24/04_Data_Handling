@@ -1,4 +1,4 @@
-package com.epam.pavel_senin.java.lesson4;
+package com.epam.pavel_senin.java.lesson4.studentProgressReport;
 
 import java.util.Calendar;
 import java.util.GregorianCalendar;
@@ -19,7 +19,7 @@ public class StudentProgressReport {
 	 * How many days sum to current time for calculate Start time lerning
 	 * Student1
 	 */
-	public static final int START_DATE1 = -3;
+	public static final int START_DATE1 = -10;
 	/**
 	 * How many days sum to current time for calculate Start time lerning
 	 * Student2

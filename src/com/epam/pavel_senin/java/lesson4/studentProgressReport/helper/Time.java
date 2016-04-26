@@ -1,16 +1,17 @@
-package com.epam.pavel_senin.java.lesson4.helper;
+package com.epam.pavel_senin.java.lesson4.studentProgressReport.helper;
 
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
-import com.epam.pavel_senin.java.lesson4.StudentProgressReport;
-import com.epam.pavel_senin.java.lesson4.type.Curriculum;
-import com.epam.pavel_senin.java.lesson4.type.Student;
+import com.epam.pavel_senin.java.lesson4.studentProgressReport.StudentProgressReport;
+import com.epam.pavel_senin.java.lesson4.studentProgressReport.type.Course;
+import com.epam.pavel_senin.java.lesson4.studentProgressReport.type.Curriculum;
+import com.epam.pavel_senin.java.lesson4.studentProgressReport.type.Student;
 
 /**
  * Class contain static procedures for calculate time range
  */
-public class Time {
+public final class Time {
 
 	/** int Array contain holliday day in 2016 year */
 	private static final int[] HOLLIDAY = { 1, 4, 5, 6, 7, 8, 53, 54, 67, 68, 123, 124, 130, 165, 309 };
@@ -28,7 +29,7 @@ public class Time {
 	 */
 	static public Calendar getEndDate(Calendar startDate, Curriculum curriculum) {
 
-		int amountWorkHours = curriculum.getSumHours();
+		int amountWorkHours = Time.getSumHoursCurriculum(curriculum);
 		int currentHour = 0;
 		Calendar tmpDate = (Calendar) startDate.clone();
 
@@ -75,17 +76,17 @@ public class Time {
 	 * @param currentTime
 	 * @return return count of work hours between two date
 	 */
-	static public int getDiffWorkTimeInHours(Student student, Calendar currentTime) {
+	static public int getDiffWorkTimeInHours(Student student, Calendar startDate, Calendar currentTime) {
 
 		Calendar tmpDate1 = new GregorianCalendar();
 		Calendar tmpDate2 = new GregorianCalendar();
 
-		if (timeProgrammPassed(student, currentTime)) {
-			tmpDate1 = (Calendar) student.getEndDate().clone();
+		if (timeProgrammPassed(student, startDate, currentTime)) {
+			tmpDate1 = (Calendar) Time.getEndDate(startDate, student.getCurriculumStudend()).clone();
 			tmpDate2 = (Calendar) currentTime.clone();
 		} else {
 			tmpDate1 = (Calendar) currentTime.clone();
-			tmpDate2 = (Calendar) student.getEndDate().clone();
+			tmpDate2 = (Calendar) Time.getEndDate(startDate, student.getCurriculumStudend()).clone();
 		}
 
 		int workHoursBetween = 0;
@@ -111,11 +112,11 @@ public class Time {
 	 * @param currentTime
 	 * @return return true if current time more than end time of learning
 	 */
-	static public boolean timeProgrammPassed(Student student, Calendar currentTime) {
+	static public boolean timeProgrammPassed(Student student, Calendar startDate, Calendar currentTime) {
 
 		boolean timeProgrammPased = false;
 
-		long endDateStudentMS = student.getEndDate().getTimeInMillis();
+		long endDateStudentMS = Time.getEndDate(startDate, student.getCurriculumStudend()).getTimeInMillis();
 		long currentDateMS = currentTime.getTimeInMillis();
 
 		if (currentDateMS > endDateStudentMS) {
@@ -143,6 +144,21 @@ public class Time {
 		}
 
 		return false;
+	}
+	
+	/**
+	 * @param currentCurriculum
+	 * @return Sum Hours in Curriculum
+	 */
+	public static int getSumHoursCurriculum(Curriculum currentCurriculum) {
+		
+		int sumHours=0;		
+		Course [] coursesInCurriculum =currentCurriculum.getCoursesInCurriculum();		
+		
+		for (Course currentCourse: coursesInCurriculum) {			
+			sumHours = sumHours + currentCourse.getDurationHours();			
+		}				
+		return sumHours;
 	}
 
 }
